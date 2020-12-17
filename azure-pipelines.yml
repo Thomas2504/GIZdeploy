@@ -1,0 +1,71 @@
+# Azure DevOps pipeline example
+#
+# This pipeline runs multiple stages
+# release stage uses a 'special' deployment job
+# consider this approach as a 'minumum template' to use in productuin
+
+trigger:
+- master # pipeline will run on new commits to specified branch
+
+variables:
+  subscriptionConnectionName: 'My subscription connection' # this is the name of the service connection in Azure DevOps
+  subscriptionId: $(secretSubscriptionId)
+  poolName: 'Windows-latest'
+
+pool:
+  vmImage: $(poolName)
+
+# normally build stages will build an application along with the infrastructure
+stages:
+  - stage: BUILD
+    jobs:
+    - job:
+      displayName: 'copy templates as artifacts'
+      steps:
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Pipeline.Workspace)'
+            artifact: 'resourceTemplates'
+            publishLocation: 'pipeline'
+
+ # production scenarios often require a more complex test. In this case we verify the arm tempate 
+  - stage: TEST
+    jobs:
+    - job:
+      displayName: 'Verify ARM template'
+      steps:
+        - task: AzureResourceManagerTemplateDeployment@3
+          inputs:
+            deploymentScope: 'Subscription'
+            azureResourceManagerConnection: $(subscriptionConnectionName)  #defined in variable
+            subscriptionId: $(subscriptionId) #defined in variable
+            location: 'NorwayEast'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(Build.SourcesDirectory)/linked-nested/nested/azure.deploy.json' # path to the file you wan to deploy. could be url using csmFileLink
+            csmParametersFile: '$(Build.SourcesDirectory)/linked-nested/nested/azure.deploy.parameters.json'
+            deploymentMode: 'Validation'
+            deploymentName: 'Validatingtemplate'
+  
+  - stage: RELEASE
+    dependsOn: TEST # stage will not run if test fails
+    jobs:
+      - deployment: 'deployResources'
+        displayName: 'Deploy azure resources'
+        environment: 'arm-livestreams'
+        pool:
+         vmImage: $(poolName)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Subscription'
+                    azureResourceManagerConnection: $(subscriptionConnectionName)  #defined in variable
+                    subscriptionId: $(subscriptionId) #defined in variable
+                    location: 'NorwayEast'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/resourceTemplates/s/linked-nested/nested/azure.deploy.json' # path to the file you wan to deploy. could be url using csmFileLink
+                    csmParametersFile: '$(Pipeline.Workspace)/resourceTemplates/s/ci-cd/azure.deploy.parameters.json' # parameter file path/uri
+                    deploymentMode: 'Incremental'
+                    deploymentName: 'cicd$(Build.BuildNumber)' # adding a pipeline build number to the deployment name. this will increment on every run.
