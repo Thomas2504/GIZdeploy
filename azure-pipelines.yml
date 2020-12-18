@@ -65,7 +65,7 @@ stages:
                     subscriptionId: $(subscriptionId) #defined in variable
                     location: 'NorwayEast'
                     templateLocation: 'Linked artifact'
-                    csmFile: '$(Pipeline.Workspace)/resourceTemplates/s/linked-nested/nested/azure.deploy.json' # path to the file you wan to deploy. could be url using csmFileLink
-                    csmParametersFile: '$(Pipeline.Workspace)/resourceTemplates/s/ci-cd/azure.deploy.parameters.json' # parameter file path/uri
+                    csmFile: '$(Build.SourcesDirectory)/azure.deploy.json' # path to the file you wan to deploy. could be url using csmFileLink
+                    csmParametersFile: '$(Build.SourcesDirectory)/azure.deploy.parameters.json' # parameter file path/uri
                     deploymentMode: 'Incremental'
                     deploymentName: 'cicd$(Build.BuildNumber)' # adding a pipeline build number to the deployment name. this will increment on every run.
