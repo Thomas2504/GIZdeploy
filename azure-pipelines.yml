@@ -41,8 +41,8 @@ stages:
             subscriptionId: $(subscriptionId) #defined in variable
             location: 'NorwayEast'
             templateLocation: 'Linked artifact'
-            csmFile: '$(Build.SourcesDirectory)/linked-nested/nested/azure.deploy.json' # path to the file you wan to deploy. could be url using csmFileLink
-            csmParametersFile: '$(Build.SourcesDirectory)/linked-nested/nested/azure.deploy.parameters.json'
+            csmFile: '$(Build.SourcesDirectory)/azure.deploy.json' # path to the file you wan to deploy. could be url using csmFileLink
+            csmParametersFile: '$(Build.SourcesDirectory)/azure.deploy.parameters.json'
             deploymentMode: 'Validation'
             deploymentName: 'Validatingtemplate'
   
