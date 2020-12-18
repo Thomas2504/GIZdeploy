@@ -9,7 +9,7 @@ trigger:
 
 variables:
   subscriptionConnectionName: 'My subscription connection' # this is the name of the service connection in Azure DevOps
-  subscriptionId: $(secretSubscriptionId)
+  subscriptionId: '2271c899-33c2-4bc3-abe5-2f81f0934f64'
   poolName: 'Windows-latest'
 
 pool:
