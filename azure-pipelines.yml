@@ -8,6 +8,7 @@ trigger:
 - master # pipeline will run on new commits to specified branch
 
 variables:
+- group: GIZVariablengruppe
   subscriptionConnectionName: 'My subscription connection' # this is the name of the service connection in Azure DevOps
   subscriptionId: $(secretSubscriptionId)
   poolName: 'Windows-latest'
