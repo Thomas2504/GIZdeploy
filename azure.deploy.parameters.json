@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountName": {
-            "value": "advtempnestedldmo"
+            "value": "advtempnestedlmaatk"
         },
         "resourceGroupName": {
             "value": "rg-advanced-nested"
