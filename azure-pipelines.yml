@@ -17,7 +17,7 @@ pool:
 
 # normally build stages will build an application along with the infrastructure
 stages:
-  - stage: BUILD
+  - stage: GIZBUILD
     jobs:
     - job:
       displayName: 'copy templates as artifacts'
