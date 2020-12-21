@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountName": {
-            "value": "advtempnestedlmaatk"
+            "value": "GIZadvtempnestedlmaatk"
         },
         "resourceGroupName": {
             "value": "rg-advanced-nested"
         },
         "numberOfStorageAccounts": {
-            "value": 5
+            "value": 13
         }
     }
 }
